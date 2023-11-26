@@ -19,8 +19,7 @@
 GeoGebraの空間図形の空のファイルを「htmlにエクスポート」した、htmlファイルです
 
 ブラウザで開くだけで動作しますが、動作にはネットワーク接続が必要です。
-[https://wachiakihito.github.io/ggbpdf/]
-(https://wachiakihito.github.io/ggbpdf/)
+[https://wachiakihito.github.io/ggbpdf/](https://wachiakihito.github.io/ggbpdf/)
 にも置いてあるので、気軽に試せます。
 
 ### スクリーンショット
