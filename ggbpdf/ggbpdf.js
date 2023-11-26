@@ -52,7 +52,7 @@ class GGBPDF {
       <label>gap width<input type="number" id="gap" min="0" max="1" step="0.1" value="0.2"></label>
       </td></tr>
       <tr><td>
-      <svg id="mysvg" viewBox="0 0 ${GGBPDF.SVGW} ${GGBPDF.SVGW}" onclick="GGBPDF.downloadSVG()" width="${GGBPDF.SVGW}" xmlns="http://www.w3.org/2000/svg"></svg>
+      <svg id="mysvg" viewBox="0 0 ${GGBPDF.SVGW} ${GGBPDF.SVGW}" onclick="downloadSVG()" width="${GGBPDF.SVGW}" xmlns="http://www.w3.org/2000/svg"></svg>
       </td></tr>
       <tr><td>
       <button id="gen-pdf">generate pdf</button>
@@ -91,29 +91,12 @@ class GGBPDF {
     // 既にあるなら何もしない
     if (GGBPDF.win.document.getElementById('mysvg')) { return };
     // svg, pdf 領域作成
-    var html = `<svg id="mysvg" viewBox="0 0 ${GGBPDF.SVGW} ${GGBPDF.SVGW}" onclick="GGBPDF.downloadSVG()" width="${GGBPDF.SVGW}" xmlns="http://www.w3.org/2000/svg"></svg>
+    var html = `<svg id="mysvg" viewBox="0 0 ${GGBPDF.SVGW} ${GGBPDF.SVGW}" onclick="downloadSVG()" width="${GGBPDF.SVGW}" xmlns="http://www.w3.org/2000/svg"></svg>
 <iframe id="pdf" style="width:${GGBPDF.PDFW+5}px; height:${GGBPDF.PDFW+5}px;"></iframe>`;
     GGBPDF.win.document.body.insertAdjacentHTML('beforeend', html);
     // svgウィンドウの情報を初期化
     OutputSVG.initialize(GGBPDF.win);
     GGBPDF.update_draw();
-  }
-
-  // SVGのダウンロード
-  static downloadSVG() {
-    // svgのテキスト作成
-    var td = OutputSVG.svg.parentElement;
-    var svgtext = td.innerHTML;
-    // blob作成
-    const filename = 'ggbsvg.svg';
-    const blob = new Blob([svgtext], { type: 'image/svg+xml' });
-    // A要素で無理矢理ダウンロード
-    const elt = document.createElement('a');
-    elt.href = URL.createObjectURL(blob);
-    elt.target = '_blank';
-    elt.download = filename;
-    elt.click();
-    URL.revokeObjectURL(elt.href);
   }
 
   // 図形オブジェクトの更新
