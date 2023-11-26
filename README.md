@@ -117,7 +117,7 @@ platexでそのままタイプセットできるtexファイルを標準出力�
 ### 実行に必要なファイル
 * ggbtex/ggbtex.rb
 * ggbtex/parseggb.rb
-* ggbtex/lib_hlr.rb
+* ggbtex/lib_hlr3.rb
 
 ### 対応している図形
 概ねindex.htmlに準じますが、
