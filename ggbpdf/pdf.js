@@ -22,10 +22,10 @@ async function renderPDF() {
 	y1 *= OutputSVG.scale;
 	x2 *= OutputSVG.scale;
 	y2 *= OutputSVG.scale;
-	x1 += 200;
-	y1 += 200;
-	x2 += 200;
-	y2 += 200;
+	x1 += GGBPDF.SVGW/2;
+	y1 += GGBPDF.SVGW/2;
+	x2 += GGBPDF.SVGW/2;
+	y2 += GGBPDF.SVGW/2;
 	if (i == 0) {
 	  page.drawLine({start:{x:x1,y:y1},end:{x:x2,y:y2}});
 	} else {
@@ -50,3 +50,21 @@ async function renderPDF() {
   const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
   GGBPDF.win.document.getElementById('pdf').src = pdfDataUri;
 }
+
+// SVGのダウンロード
+function downloadSVG() {
+  // svgのテキスト作成
+  var td = OutputSVG.svg.parentElement;
+  var svgtext = td.innerHTML;
+  // blob作成
+  const filename = 'ggbsvg.svg';
+  const blob = new Blob([svgtext], { type: 'image/svg+xml' });
+  // A要素で無理矢理ダウンロード
+  const elt = document.createElement('a');
+  elt.href = URL.createObjectURL(blob);
+  elt.target = '_blank';
+  elt.download = filename;
+  elt.click();
+  URL.revokeObjectURL(elt.href);
+}
+
