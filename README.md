@@ -23,7 +23,7 @@ GeoGebraの空間図形の空のファイルを「htmlにエクスポート」�
 にも置いてあるので、気軽に試せます。
 
 ### スクリーンショット
-![立方体](/fig/cube-plane.pdf)
+![立方体](fig/cube-plane.pdf?raw=true)
 ![5正四面体](https://github.com/wachiakihito/ggbpdf/blob/83207c57f7a6d6f2dc85712505646dc24abf6c59/fig/five-tetorahedra.pdf)
 
 ### 使用方法
