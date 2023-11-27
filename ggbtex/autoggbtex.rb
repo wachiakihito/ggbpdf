@@ -1,4 +1,8 @@
 # coding: utf-8
+# Copyright (c) 2023 akihito wachi
+# Released under the MIT license
+# https:#opensource.org/licenses/mit-license.php
+
 # ggbファイルの更新を監視して、変更される度に ggb->tex->dvi->pdf を作成する
 
 TMPFILENAME = 'autoggbtex_tmp' # 出力ファイル名 (+これに拡張子)
