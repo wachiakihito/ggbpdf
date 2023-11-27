@@ -57,16 +57,6 @@ pts.each {|lbl, (x, y, z)|
 segs_3d = segs.map {|lbl, (p0, p1)| [pts_3d[p0], pts_3d[p1]] }
 polys_3d = polys.map {|lbl, ps| ps.map {|pt| pts_3d[pt] } }
 
-$stderr.puts 'segs, polys, eyex, scrnx, scale'
-$stderr.puts(
-segs_3d.inspect,
-polys_3d.inspect,
-eyex,
-screenx,
-scale
-)
-
-
 #### 出力
 # ヘッダ
 unit = 50 # unitlength (mm)
