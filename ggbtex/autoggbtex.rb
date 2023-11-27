@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: utf-8; mode: ruby; mode: outline-minor -*-
 # Copyright (c) 2023 akihito wachi
 # Released under the MIT license
 # https:#opensource.org/licenses/mit-license.php
