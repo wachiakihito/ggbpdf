@@ -5,6 +5,8 @@
 
 // ggbのグローバルjavascriptに記述するもの
 async function ggbOnInit() {
+  // htmlにエクスポートされているのでなければ機能を実現しない
+  if (window.location.href.slice(0,3) == 'app') { return }
   // 各種コントロールの初期化
   if (GGBPDF.TWOWINDOW) { // svg, pdfを別ウィンドウで開く場合、ウィンドウにコントロールを作成
     GGBPDF.setup_control_2win();
