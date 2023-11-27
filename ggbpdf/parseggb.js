@@ -158,6 +158,7 @@ class ParseGGB {
 	break;
       case 'Prism':
 	if (is.length == 2) {
+	  break;
 	  throw '押し出しは未対応';
 	}
 	n = is.length - 1 // n角柱
