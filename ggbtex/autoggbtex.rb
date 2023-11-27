@@ -1,5 +1,7 @@
 # coding: utf-8
-TMPFILENAME = 'autoggbtex_tmp'
+# ggbファイルの更新を監視して、変更される度に ggb->tex->dvi->pdf を作成する
+
+TMPFILENAME = 'autoggbtex_tmp' # 出力ファイル名 (+これに拡張子)
 
 #### ggbファイル名取得
 if ARGV.empty? then
