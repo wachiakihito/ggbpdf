@@ -25,7 +25,8 @@
 このggbファイルをGeoGebraで開くと、svg出力の機能が備わっています。
 
 ### 1-1. スクリーンショット
-作る
+![立方体](fig/cube-plane-ggb.png)
+![5正四面体](fig/five-tetorahedra-ggb.png)
 
 ### 1-2. 使用方法
 
@@ -94,9 +95,8 @@ pdf画像はリアルタイムには表示されず、
 作成された画像はブラウザの機能を使ってダウンロードして下さい。
 
 ### 2-1. スクリーンショット
-変える
-![立方体](fig/cube-plane.png)
-![5正四面体](fig/five-tetorahedra.png)
+
+![5つの正8面体の複合多面体](fig/compound-icosahedron-html.png)
 
 ### 2-2. 使用方法、対応している図形・機能、対応していない図形・機能
 **ggbpdf.ggb**と同様です。
