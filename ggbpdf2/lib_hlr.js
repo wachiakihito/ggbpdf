@@ -393,7 +393,7 @@ class V {
   // 交点がなければ [null, null]
   static int_line_line_st(u0, u1, v0, v1) {
     var d = V.area2([0,0], V.sub(u1, u0), V.sub(v1, v0));
-    if (d == 0) { return [null, null] };
+    if (Math.abs(d) < EPS) { return [null, null] };
     var s = -V.area2(v0, u0, v1) / d;
     var t = -V.area2(v0, u0, u1) / d;
     return [s, t]
@@ -561,9 +561,6 @@ class HLR {
           let [u0, u1] = this.segs3d[k];
           let [v0, v1] = segs2d[k];
           let [s, t] = V.int_line_line_st(v0, v1, q0, q1) // 2d
-
-	  if (k==3) { console.log('u(3d), v(2d), q(2d), [s,t] = ', [[u0,u1],[v0,v1],[q0,q1],[s,t]] )}
-
           if (s===null || s < 0 || s > 1 || t < 0 || t > 1) { continue };
           let s3d = Ivl.to_3d_t(s, u0, u1, this.eyex);
           let t3d = Ivl.to_3d_t(t, p0, p1, this.eyex);
