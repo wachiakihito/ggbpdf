@@ -86,6 +86,7 @@ class Ivl {
 
   //// 3dの区間を2dの区間に変換
   // p0, p1が3dで t = 0, 1 の点
+  // p0, p1を外分する位置では、2dの区間にしたときの上限、下限があることに注意
   static to_2d(ivls, p0, p1, eyex, scrnx) {
     var l0 = eyex - p0[0];
     var l1 = eyex - p1[0];
@@ -114,7 +115,7 @@ class Ivl {
   static to_3d_t(t, p0, p1, eyex) {
     var l0 = eyex - p0[0];
     var l1 = eyex - p1[0];
-    if (t == INF || t == -INF) {
+    if (t == INF || t == -INF) { // 無限の扱いはちょっと怪しい
       return t
     } else {
       return t*l0 / ( t*l0 + (1-t)*l1 )
@@ -553,10 +554,10 @@ class HLR {
       for (let k = 0; k < this.polys3d.length; k++) {
         // 線分を含む平面は無視
         if (this.s_on_p[i].includes(k)) { continue };
-        let pos_ivls = V.pospart_plane_line_t(planes3d[k], p0, p1); // 面の手前側の区間 (3d)
-        let pos_ivls_3d = Ivl.to_2d(pos_ivls, p0, p1, this.eyex, this.scrnx);
+        let pos_ivls_3d = V.pospart_plane_line_t(planes3d[k], p0, p1); // 面の手前側の区間 (3d)
+        let pos_ivls = Ivl.to_2d(pos_ivls_3d, p0, p1, this.eyex, this.scrnx); // 同上 (2d)
         let vis_ivls = (q0==q1) ? [] : V.outside_line_t(q0, q1, polys2d[k]); // 面の外部の区間 (2d)
-        ivls = Ivl.intersection(ivls, Ivl.union(...pos_ivls_3d, ...vis_ivls)); // それらの共通部分
+        ivls = Ivl.intersection(ivls, Ivl.union(...pos_ivls, ...vis_ivls)); // それらの共通部分
       }
       // 隠れている線を求める
       var inv_ivls = Ivl.sub([[0,1]], ivls);
