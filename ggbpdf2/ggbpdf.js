@@ -253,7 +253,7 @@ class GGBPDF {
           let k = GGBPDF.sameSeg(seg, GGBPDF.segs3d);
           if (k === null) {
             GGBPDF.segs3d.push(seg);
-            GGBPDF.segstyles.push({thickness:(GGBPDF.intw), lineType:0}); // 交線スタイルハードコード
+            GGBPDF.segstyles.push({thickness:(GGBPDF.intw), lineType:0}); // 交線スタイル
             GGBPDF.s_on_p[GGBPDF.segs3d.length-1] = [i,j];
           } else {
             GGBPDF.s_on_p[k].push(i, j);
