@@ -140,15 +140,16 @@ class GGBPDF {
     GGBPDF.svg = document.getElementById('mysvg');
     GGBPDF.pdf = document.getElementById('pdf');
     GGBPDF.setup_floater_movable();
-    // GGBPDF.update_draw();
     // ggb操作のイベントを受信して図形を更新し描画するイベントリスナ (クラス関数はダメ?)
-    ggbApplet.registerAddListener("update_draw");
-    ggbApplet.registerRemoveListener("update_draw");
-    ggbApplet.registerUpdateListener("update_draw");
-    ggbApplet.registerRenameListener("update_draw");
-    ggbApplet.registerClearListener("update_draw");
-    // ggb操作のイベントを受信して描画するイベントリスナ (クラス関数はダメ?)
-    ggbApplet.registerClientListener("maybe_draw");
+    if (typeof ggbApplet !== "undefined") {
+      ggbApplet.registerAddListener("update_draw");
+      ggbApplet.registerRemoveListener("update_draw");
+      ggbApplet.registerUpdateListener("update_draw");
+      ggbApplet.registerRenameListener("update_draw");
+      ggbApplet.registerClearListener("update_draw");
+      // ggb操作のイベントを受信して描画するイベントリスナ (クラス関数はダメ?)
+      ggbApplet.registerClientListener("maybe_draw");
+    }
     // チェックボックス等のクリックを受信して図形を更新し描画するイベントリスナ
     document.getElementById('hidden-line').addEventListener('click', GGBPDF.update_draw);
     document.getElementById('intw').addEventListener('click', GGBPDF.update_draw);
@@ -170,14 +171,29 @@ class GGBPDF {
       GGBPDF.pdf.setAttribute('disabled', true);
       GGBPDF.pdf.parentElement.parentElement.style.display = 'none';
     }
-    // 描画
-    GGBPDF.update_draw();
+    // ggbが動いていたら最初の1回分の描画
+    if (typeof ggbApplet !== "undefined") {
+      GGBPDF.update_draw();
+    } else { // ggbが動いていない時用に、ボタンid=xml2svgにイベントハンドラを設定
+    document.getElementById('xml2svg').addEventListener('click', GGBPDF.update_draw);
+    }
   }
 
-  // 図形オブジェクトの更新
-  static updateObject() {
-    // xml取得と解釈
-    var xml = ggbApplet.getXML();
+  //// xml文字列の取得。
+  // ggbが動いていればggbから取得
+  // ggbが動いていなければ、テキストエリア#xmlから取得
+  static getXML() {
+    if (typeof ggbApplet !== "undefined") {
+      return ggbApplet.getXML();
+    } else {
+      return document.getElementById('xml').value;
+    }
+  }
+
+  //// 図形オブジェクトの更新
+  // xmlは、ggbApplet.getXML()の結果の文字列
+  static updateObject(xml) {
+    // xml解釈
     GGBPDF.ggb = new GGBParser(xml);
     // 面と線分を収集 (座標に展開)
     GGBPDF.polys3d = [];
@@ -237,7 +253,7 @@ class GGBPDF {
           let k = GGBPDF.sameSeg(seg, GGBPDF.segs3d);
           if (k === null) {
             GGBPDF.segs3d.push(seg);
-            GGBPDF.segstyles.push({thickness:(GGBPDF.intw), lineType:0}); // 交線スタイルハードコード
+            GGBPDF.segstyles.push({thickness:(GGBPDF.intw), lineType:0}); // 交線スタイル
             GGBPDF.s_on_p[GGBPDF.segs3d.length-1] = [i,j];
           } else {
             GGBPDF.s_on_p[k].push(i, j);
@@ -278,7 +294,8 @@ class GGBPDF {
       // 更新する
       GGBPDF.updating = true;
       try {
-        GGBPDF.updateObject();
+	let xml = GGBPDF.getXML();
+        GGBPDF.updateObject(xml);
         } catch (ex) {
           GGBPDF.pending = true;
       } finally {
@@ -303,7 +320,7 @@ class GGBPDF {
   static maybe_draw(ev) {
     switch (ev.type) {
     case 'viewChanged3D':
-      var xml = ggbApplet.getXML();
+      var xml = GGBPDF.getXML();
       GGBPDF.ggb = new GGBParser(xml);
       GGBPDF.draw();
       break;

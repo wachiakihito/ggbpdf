@@ -1,3 +1,4 @@
+// -*- coding: utf-8; mode: javascript; mode: outline-minor; js-indent-level: 2 -*-
 //// svg描画
 class SVG {
   // 線分のテンプレート
@@ -69,7 +70,8 @@ class SVG {
   }
 
   //// hlrに計算されている図形を、回転、平行移動、拡大してsvgで描画
-  // オブジェクトを、(xZero, yZero, zZero) 平行移動、 // y軸について-xAngle回転、z軸について-zAngle回転、
+  // オブジェクトを、(xZero, yZero, zZero) 平行移動、
+  // y軸について-xAngle回転、z軸について-zAngle回転、
   // scale倍の順に変換する
   // hiddenが真なら陰線も描画
   static render(svg, ggb, hlr, hidden) {

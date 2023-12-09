@@ -6,27 +6,6 @@
 // 3dのgeogberaのggbファイルを読み、必要な情報を構築する。
 
 class GGBParser {
-  //// トポロジカルソート (不要かも?)
-  // 入力 es = {x=>[xより小さい要素]}
-  //      es のキーがすべての要素でなくてはならない
-  //      es は破壊される
-  // 出力 要素を tsortした配列
-  static tsort(es) {
-    let ans = [];
-    while (Object.keys(es).length > 0) {
-      ParseGGB._tsort(Object.keys(es)[0], es, ans);
-    }
-    return ans;
-  }
-
-  // tsortの下請け
-  static _tsort(x, es, ans) {
-    if (! (x in es)) { return };
-    es[x].forEach ((y) => { ParseGGB._tsort(y, es, ans) });
-    ans.push(x);
-    delete es[x];
-  }
-
   // 子要素の属性取得
   static getAttr(elt, path, attr) {
     return elt.querySelector(path).getAttribute(attr);

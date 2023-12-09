@@ -27,19 +27,17 @@ const CMPA = function(a, b) {                           // 配列の配列
 class Ivl {
   //// 複数の区間の和集合 (区間集合で返す)
   static union(...ivls) {
-    ivls = [...ivls]; // 複製
-    ivls.sort(CMPA);
-    var i = 0;
-    while (i <= ivls.length-2) {
-      if (ivls[i][1] < ivls[i+1][0]) {
-        i += 1;
-      } else {
-        ivls[i][1] = Math.max(ivls[i][1], ivls[i+1][1]);
-        ivls.splice(i+1, 1); // 1要素削除
+    ivls = ivls.toSorted(CMPA);
+    var ans = [[ivls[0][0], ivls[0][1]]]; // 浅いコピーはダメ
+    for (let i = 1; i < ivls.length; i++) {
+      if (ans[ans.length-1][1] < ivls[i][0]) { // 次の区間との間にすき間がある時
+	ans.push([ivls[i][0], ivls[i][1]]); // 浅いコピーはダメ
+      } else if (ans[ans.length-1][1] < ivls[i][1]) { // 次の区間と連結で真に伸びる時
+	ans[ans.length-1][1] = ivls[i][1];
       }
-    };
-    return ivls;
-  };
+    }
+    return ans;
+  }
 
   //// 2つの区間集合の共通部分 (区間集合で返す)
   // 現状 O(mn) だが O(N log N) にはできそう (N = max{m,n})
@@ -88,30 +86,36 @@ class Ivl {
 
   //// 3dの区間を2dの区間に変換
   // p0, p1が3dで t = 0, 1 の点
-  static to_2d(ivls, p0, p1, eyex) {
+  // p0, p1を外分する位置では、2dの区間にしたときの上限、下限があることに注意
+  static to_2d(ivls, p0, p1, eyex, scrnx) {
     var l0 = eyex - p0[0];
     var l1 = eyex - p1[0];
+    var d = eyex - scrnx;
     var ans = [];
     for (let i = 0; i < ivls.length; i++) {
       ans.push([]);
       for (let j = 0; j < 2; j++) {
         let t = ivls[i][j];
-        if (t == INF || t == -INF) {
-          ans[ans.length-1].push(t)
-        } else {
+	if (l0 == l1) {
+	  ans[ans.length-1].push(t);
+	} else if ((l1>l0 && t==INF) || (l0>l1 && t==-INF)) {
+	  ans[ans.length-1].push( l1/(l1-l0) );
+	} else if ((l1>l0 && t<-(l0-d)/(l1-l0)) || (l0>l1 && t>-(l0-d)/(l1-l0))) {
+	  ans[ans.length-1].push( -l1*(l1-d) / d / (l1-l0) );
+	} else {
           ans[ans.length-1].push( t*l1 / ((1-t)*l0 + t*l1) );
-        }
+	}
       }
     }
     return ans;
-  };
+  }
 
   //// 2dのパラメータを3dに変換
   // p0, p1が3dで t = 0, 1 の点
   static to_3d_t(t, p0, p1, eyex) {
     var l0 = eyex - p0[0];
     var l1 = eyex - p1[0];
-    if (t == INF || t == -INF) {
+    if (t == INF || t == -INF) { // 無限の扱いはちょっと怪しい
       return t
     } else {
       return t*l0 / ( t*l0 + (1-t)*l1 )
@@ -390,22 +394,31 @@ class V {
 
   //// 平面内の2直線の交点のパラメータ
   // u0 + s (u1-u0) = v0 + t (v1-u0) を満たすパラメータ s,t を返す)
-  // 交点がなければ [nil, nil]
+  // 同一直線ならば [true, true]
+  // 交点がなければ [null, null]
   static int_line_line_st(u0, u1, v0, v1) {
     var d = V.area2([0,0], V.sub(u1, u0), V.sub(v1, v0));
-    if (d == 0) { return [null, null] };
-    var s = -V.area2(v0, u0, v1) / d;
-    var t = -V.area2(v0, u0, u1) / d;
-    return [s, t]
+    if (Math.abs(d) > EPS) { // 2直線が平行ではないとき
+      var s = -V.area2(v0, u0, v1) / d;
+      var t = -V.area2(v0, u0, u1) / d;
+      return [s, t]
+    } else if (Math.abs(V.area2(v0, u0, v1)) < EPS) { // 同一直線のとき
+      return [true, true];
+    } else { // 平行で異なる直線のとき
+      return [null, null];
+    }
   }
 
   //// 平面内の2直線の交点
   // 交点がなければnil
+  // 同一直線ならばu0
   static int_line_line(u0, u1, v0, v1) {
     var [s, t] = V.int_line_line_st(u0, u1, v0, v1);
-    if (typeof s == "number") {
+    if (typeof s == "number") { // 交差するとき
       return V.add(u0, V.scl(s, V.sub(u1, u0)));
-    } else {
+    } else if (s === true) { // 同一直線のとき
+      return u0;
+    } else { // 平行で異なる直線のとき
       return null;
     }
   }
@@ -421,7 +434,7 @@ class V {
       var v0 = poly[(i+poly.length) % poly.length];
       var v1 = poly[i+1];
       var [s, t] = V.int_line_line_st(v0, v1, pt0, pt1);
-      if (s===null && Math.abs(V.area2(v0, v1, pt0)) < EPS) { // 線分が辺と同一直線なら外部
+      if (s === true) { // 線分が辺と同一直線なら外部
         var t0 = V.inn(pt0pt1, V.sub(v0,pt0)) / V.inn(pt0pt1, pt0pt1);
         var t1 = V.inn(pt0pt1, V.sub(v1,pt0)) / V.inn(pt0pt1, pt0pt1);
         var t0t1 = [t0, t1];
@@ -429,7 +442,7 @@ class V {
         out_ivls.push(t0t1);
         continue;
       }
-      if (s===null || s <  0-EPS || s > 1+EPS) { continue };
+      if (s === null || s <  0-EPS || s > 1+EPS) { continue };
       var inout = V.inn(p90, V.sub(v1, v0)) > 0 ? IN : OUT;
       ts.push([t, inout]);
     }
@@ -539,12 +552,12 @@ class HLR {
       let ivls = [[0,1]];
       // 各面で隠れない部分を求める
       for (let k = 0; k < this.polys3d.length; k++) {
-        // 線分を含む平面は無視 !! とりあえずやらない
+        // 線分を含む平面は無視
         if (this.s_on_p[i].includes(k)) { continue };
-        let pos_ivls = V.pospart_plane_line_t(planes3d[k], p0, p1); // 面の手前側の区間 (3d)
-        let pos_ivls_3d = Ivl.to_2d(pos_ivls, p0, p1, this.eyex);
+        let pos_ivls_3d = V.pospart_plane_line_t(planes3d[k], p0, p1); // 面の手前側の区間 (3d)
+        let pos_ivls = Ivl.to_2d(pos_ivls_3d, p0, p1, this.eyex, this.scrnx); // 同上 (2d)
         let vis_ivls = (q0==q1) ? [] : V.outside_line_t(q0, q1, polys2d[k]); // 面の外部の区間 (2d)
-        ivls = Ivl.intersection(ivls, Ivl.union(...pos_ivls_3d, ...vis_ivls)); // それらの共通部分
+        ivls = Ivl.intersection(ivls, Ivl.union(...pos_ivls, ...vis_ivls)); // それらの共通部分
       }
       // 隠れている線を求める
       var inv_ivls = Ivl.sub([[0,1]], ivls);
@@ -561,7 +574,7 @@ class HLR {
           let [u0, u1] = this.segs3d[k];
           let [v0, v1] = segs2d[k];
           let [s, t] = V.int_line_line_st(v0, v1, q0, q1) // 2d
-          if (s===null || s < 0 || s > 1 || t < 0 || t > 1) { continue };
+          if (s===null || s===true || s < 0 || s > 1 || t < 0 || t > 1) { continue };
           let s3d = Ivl.to_3d_t(s, u0, u1, this.eyex);
           let t3d = Ivl.to_3d_t(t, p0, p1, this.eyex);
           if (u0[0]+s3d*(u1[0]-u0[0]) <= p0[0]+t3d*(p1[0]-p0[0] + EPS)) { continue }; // 奥行チェック
@@ -569,7 +582,7 @@ class HLR {
         }
         ivls = Ivl.insert_gaps(ivls, ts, gap_w);
       }
-      // 拡張された線分にして蓄積 (!! 拡張とは?)
+      // 線分を蓄積
       for (let ts of ivls) {
         let seg = ts.map ((t) => V.add(q0, V.scl(t, V.sub(q1,q0))) ).sort(CMPA); // 同じ線分の識別のためsort
         this.vstyles[seg] = this.segstyles[i];
