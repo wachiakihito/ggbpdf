@@ -1,3 +1,4 @@
+// -*- coding: utf-8; mode: javascript; mode: outline-minor; js-indent-level: 2 -*-
 //// pdf描画
 class PDF {
   //// pdf描画
