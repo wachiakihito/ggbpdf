@@ -64,9 +64,21 @@ class SVG {
     x += uv[0];
     y += uv[1]; // SVGもオフセットもy軸は下向き
     // 誤差吸収ハードコード
-    x -= 0
+    x += 5
     y -= 5
     SVG.objs.push(`<text x="${x}" y="${y}">${lbl}</text>`);
+  }
+
+  //// foreignObjectを描画キューに追加
+  static foreignObject(xy2d, uv, tex) {
+    var scale = SVG.ggb.camera.scale;
+    var [x, y] = SVG.conv(xy2d[0]*scale, xy2d[1]*scale);
+    x += uv[0];
+    y += uv[1]; // SVGもオフセットもy軸は下向き
+    // 誤差吸収ハードコード
+    x += 5
+    y -= 25
+    SVG.objs.push(`<foreignObject x="${x}" y="${y}">${tex}</foreignObject>`);
   }
 
   //// hlrに計算されている図形を、回転、平行移動、拡大してsvgで描画
@@ -95,7 +107,11 @@ class SVG {
                             ggb.camera.xAngle, ggb.camera.zAngle,
                             ggb.camera.xZero, ggb.camera.yZero, ggb.camera.zZero);
       let xy2d = V.proj(ggb.camera.eyex, ggb.camera.scrnx, xyz)[0];
-      SVG.text(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
+      if (ggb.elts[lbl].labelText[0] == '<') { // tex
+	SVG.foreignObject(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
+      } else { // 文字列
+	SVG.text(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
+      }
     }
     // 更新
     SVG.svg.innerHTML = SVG.objs.join("\n");
