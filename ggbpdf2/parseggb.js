@@ -84,6 +84,7 @@ class GGBParser {
       case 'point': // 点の座標、ラベルオフセット、this.ptsも
       case 'point3d':
         res.kind = 'Point'; // command要素がないのでここで設定
+	// 座標
         if (res.type == 'point') {
           res.coords = [ GGBParser.getAttrN(elt, 'coords', 'x'),
                          GGBParser.getAttrN(elt, 'coords', 'y'),
@@ -93,7 +94,9 @@ class GGBParser {
                          GGBParser.getAttrN(elt, 'coords', 'y'),
                          GGBParser.getAttrN(elt, 'coords', 'z') ];
         }
+	// this.pts
         this.pts[lbl] = res.coords;
+	// ラベルオフセット
         let eltofst = elt.querySelector('labelOffset');
         let uv = [0, 0];
         if (eltofst) {
@@ -101,6 +104,13 @@ class GGBParser {
                   Number(eltofst.getAttribute('y'))];
         }
         res.labelOffset = uv;
+	// ラベルの表示
+	let lblmode = GGBParser.getAttrN(elt, 'labelMode', 'val');
+	let lbltxt = lbl;
+	if (lblmode == 3 || lblmode == 9) {
+	  lbltxt = GGBParser.getAttr(elt, 'caption', 'val');
+	}
+	res.labelText = lbltxt;
         break;
       case 'segment': // 線分の太さ、スタイル
       case 'segment3d':
