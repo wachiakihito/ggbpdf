@@ -95,7 +95,7 @@ class SVG {
                             ggb.camera.xAngle, ggb.camera.zAngle,
                             ggb.camera.xZero, ggb.camera.yZero, ggb.camera.zZero);
       let xy2d = V.proj(ggb.camera.eyex, ggb.camera.scrnx, xyz)[0];
-      SVG.text(xy2d, ggb.elts[lbl].labelOffset, lbl);
+      SVG.text(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
     }
     // 更新
     SVG.svg.innerHTML = SVG.objs.join("\n");
