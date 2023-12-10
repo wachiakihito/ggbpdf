@@ -104,13 +104,18 @@ class GGBParser {
                   Number(eltofst.getAttribute('y'))];
         }
         res.labelOffset = uv;
-	// ラベルの表示
+	// ラベルの表示モード
 	let lblmode = GGBParser.getAttrN(elt, 'labelMode', 'val');
+	// ラベルテキスト
 	let lbltxt = lbl;
 	if (lblmode == 3 || lblmode == 9) {
 	  lbltxt = GGBParser.getAttr(elt, 'caption', 'val');
 	}
-	res.labelText = lbltxt;
+	if (lbltxt[0] != '$') {
+	  res.labelText = lbltxt; // 名前、texでない見出し
+	} else {
+	  res.labelText = katex.renderToString(lbltxt.slice(1, -1)); // texな見出し
+	}
         break;
       case 'segment': // 線分の太さ、スタイル
       case 'segment3d':
