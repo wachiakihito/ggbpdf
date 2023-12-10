@@ -163,7 +163,9 @@ class GGBPDF {
     // htmlにエクスポートされているのでなければネットワーク接続はない
     GGBPDF.online = (navigator.onLine && (window.location.href.slice(0,3) != 'app'));
     if (GGBPDF.online) {
-      await import("https://unpkg.com/pdf-lib");
+      await import("https://unpkg.com/pdf-lib"); // pdf-lib
+      await import("https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"); // katex
+      document.head.insertAdjacentHTML('beforeend', '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">');
     } else {
       let btn = document.getElementById('gen-pdf');
       btn.setAttribute('disabled', true);
