@@ -114,7 +114,7 @@ class GGBParser {
 	if (lbltxt[0] != '$') {
 	  res.labelText = lbltxt; // 名前、texでない見出し
 	} else {
-	  res.labelText = katex.renderToString(lbltxt.slice(1, -1)); // texな見出し
+	  res.labelText = katex.renderToString('\\text{\\small'+lbltxt+'}', {output:"html"}); // texな見出し
 	}
         break;
       case 'segment': // 線分の太さ、スタイル
