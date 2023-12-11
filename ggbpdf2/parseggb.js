@@ -111,7 +111,7 @@ class GGBParser {
 	if (lblmode == 3 || lblmode == 9) {
 	  lbltxt = GGBParser.getAttr(elt, 'caption', 'val');
 	}
-	if (lbltxt[0] != '$') {
+	if (lbltxt[0] != '$' || ! GGBPDF.online) {
 	  res.labelText = lbltxt; // 名前、texでない見出し
 	} else {
 	  res.labelText = katex.renderToString('\\text{\\small'+lbltxt+'}', {output:"html"}); // texな見出し
