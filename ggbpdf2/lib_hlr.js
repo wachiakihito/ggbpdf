@@ -237,7 +237,7 @@ class V {
   }
 
   //// 空間内の平面 ax+by+cz+d=0 と、2点pt0, pt1 を結ぶ直線の交点 pt0 + t (pt1-pt0) の t
-  // 共有点なければ nil、含まれていたら true
+  // 共有点なければ null、含まれていたら true
   static int_plane_line_t(plane, pt0, pt1) {
     var abc = plane.slice(0, 3);
     var d = plane[3];
@@ -254,7 +254,7 @@ class V {
   }
 
   //// 空間内の平面 ax+by+cz+d=0 と、2点pt0, pt1 を結ぶ直線の交点
-  // 共有点なければ nil、含まれていたら pt0
+  // 共有点なければ null、含まれていたら pt0
   static int_plane_line(plane, pt0, pt1) {
     var t = V.int_plane_line_t(plane, pt0, pt1);
     if (typeof t == "number") {
@@ -410,7 +410,7 @@ class V {
   }
 
   //// 平面内の2直線の交点
-  // 交点がなければnil
+  // 交点がなければnull
   // 同一直線ならばu0
   static int_line_line(u0, u1, v0, v1) {
     var [s, t] = V.int_line_line_st(u0, u1, v0, v1);
@@ -514,7 +514,7 @@ class HLR {
   // 引数   eyex   視点の位置 (eye, 0, 0) から (0,0,0) を見る
   //        scrnx  スクリーンの位置。x = scrnx
   //        gap    線分どうしが重なったときに欠く幅。単位は3次元座標での距離1。
-  //               欠かないならnil
+  //               欠かないならnull
   //        segs3d 空間の線分たち
   //        poly3d 空間の多角形たち。辺は描画されないのでsegs3dに入れること。
   //        s_on_p 線分番号=>[それを含む面番号]の配列
