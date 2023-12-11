@@ -14,7 +14,7 @@ class SVG {
   // svg要素のinnerHTMLに置く文字列をためる描画キュー (!! 改名したい)
   static objs;
 
-  //// 座標をviewBox中心を原点とする右手系に変換
+  //// 座標をviewBox中心を原点とする左手系に変換
   static conv(x, y) {
     return [x + SVG.width/2, -y + SVG.height/2]
   }
@@ -107,7 +107,7 @@ class SVG {
                             ggb.camera.xAngle, ggb.camera.zAngle,
                             ggb.camera.xZero, ggb.camera.yZero, ggb.camera.zZero);
       let xy2d = V.proj(ggb.camera.eyex, ggb.camera.scrnx, xyz)[0];
-      if (ggb.elts[lbl].labelText[0] == '<') { // texは\smallで始まるはず
+      if (ggb.elts[lbl].labelText[0] == '<') { // texは<span>で始まるはず
 	SVG.foreignObject(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
       } else { // 文字列
 	SVG.text(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
