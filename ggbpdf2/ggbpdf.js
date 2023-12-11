@@ -67,7 +67,7 @@ class GGBPDF {
     // 前回のが残っていたら何もしない
     if (document.getElementById('svgpane')) { return; }
     // 陰線表示等のコントロール、svg領域、pdf領域のtable要素
-    var html = `<table id="svgpane" style="position:absolute;left:0px;top:0px;z-index:180;background-color:#ffffff;opacity:0.9;border:1px solid"><tbody>
+    var html = `<table id="svgpane" style="position:absolute;left:0px;top:0px;z-index:180;background-color:#ffffff;opacity:1;border:1px solid"><tbody>
       <tr><td>
       <label><input type="checkbox" id="hidden-line" checked>hidden lines</label> /
       <label>int.<input type="number" id="intw" min="0" max="8" step="1" value="4"></label> /
@@ -98,6 +98,8 @@ class GGBPDF {
       var ox = event.pageX - parseInt(GGBPDF.svgpane.style.left);
       var oy = event.pageY - parseInt(GGBPDF.svgpane.style.top);
       document.addEventListener('mousemove', onMouseMove);
+      // フローティングウィンドウを透過にする
+      GGBPDF.svgpane.style.opacity = '0.5';
       // マウスムーブ
       function onMouseMove(event) {
         var x = event.pageX;
@@ -128,6 +130,8 @@ class GGBPDF {
       document.onmouseup = function() {
         document.removeEventListener('mousemove', onMouseMove);
         document.onmouseup = null;
+      // フローティングウィンドウを不透明にする
+      GGBPDF.svgpane.style.opacity = '1';
       };
     };
   }
