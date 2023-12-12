@@ -170,6 +170,9 @@ class GGBPDF {
       await import("https://unpkg.com/pdf-lib"); // pdf-lib
       await import("https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"); // katex
       document.head.insertAdjacentHTML('beforeend', '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">');
+      if (typeof PDFLib == 'undefined' || typeof katex == 'undefined') {
+	GGBPDF.online = false;
+      }
     } else {
       let btn = document.getElementById('gen-pdf');
       btn.setAttribute('disabled', true);
@@ -178,7 +181,7 @@ class GGBPDF {
       GGBPDF.pdf.parentElement.parentElement.style.display = 'none';
     }
     // ggbが動いていたら最初の1回分の描画
-    if (typeof ggbApplet !== "undefined") {
+    if (typeof ggbApplet != "undefined") {
       GGBPDF.update_draw();
     } else { // ggbが動いていない時用に、ボタンid=xml2svgにイベントハンドラを設定
     document.getElementById('xml2svg').addEventListener('click', GGBPDF.update_draw);
@@ -189,7 +192,7 @@ class GGBPDF {
   // ggbが動いていればggbから取得
   // ggbが動いていなければ、テキストエリア#xmlから取得
   static getXML() {
-    if (typeof ggbApplet !== "undefined") {
+    if (typeof ggbApplet != "undefined") {
       return ggbApplet.getXML();
     } else {
       return document.getElementById('xml').value;
