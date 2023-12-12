@@ -2,7 +2,6 @@
 //// svg描画
 class SVG {
   // 線分のテンプレート
-  static DLINE_ATTR = 'stroke="black" stroke-width="1.5" stroke-dasharray="6,3"';
   static DLINE_DASH = 'stroke-dasharray="6,3"';
   // renderの引数の保管
   static ggb;
