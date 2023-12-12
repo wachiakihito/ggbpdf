@@ -72,13 +72,14 @@ class GGBPDF {
       <label><input type="checkbox" id="hidden-line" checked>hidden lines</label> /
       <label>int.<input type="number" id="intw" min="0" max="8" step="1" value="4"></label> /
       <label>gap<input type="number" id="gap" min="0" max="1" step="0.1" value="0.2"></label>
-      <button id="download-svg">download</button>
+      <button id="download-svg">download svg</button>
       </td></tr>
       <tr><td>
       <svg id="mysvg" viewBox="0 0 ${GGBPDF.SVGW} ${GGBPDF.SVGW}" width="${GGBPDF.SVGW}" xmlns="http://www.w3.org/2000/svg"></svg>
       </td></tr>
       <tr><td>
       <button id="gen-pdf">generate pdf</button>
+      <button id="download-tex">download tex</button>
       </td></tr>
       <tr><td>
       <iframe id="pdf" style="width:${GGBPDF.PDFW+5}px; height:${GGBPDF.PDFW+5}px;"></iframe>
@@ -163,6 +164,7 @@ class GGBPDF {
     // svgのダウンロードボタンと、pdfの描画ボタンのイベントリスナ
     document.getElementById('gen-pdf').addEventListener('click', PDF.render);
     document.getElementById('download-svg').addEventListener('click', SVG.downloadSVG);
+    document.getElementById('download-tex').addEventListener('click', TEX.downloadTEX);
     // オンラインならpdf-libを同期でインポート
     // htmlにエクスポートされているのでなければネットワーク接続はない
     GGBPDF.online = (navigator.onLine && (window.location.href.slice(0,3) != 'app'));
