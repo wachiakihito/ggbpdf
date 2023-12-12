@@ -178,7 +178,6 @@ class GGBPDF {
     } else {
       let btn = document.getElementById('gen-pdf');
       btn.setAttribute('disabled', true);
-      btn.parentElement.parentElement.style.display = 'none';
       GGBPDF.pdf.setAttribute('disabled', true);
       GGBPDF.pdf.parentElement.parentElement.style.display = 'none';
     }
