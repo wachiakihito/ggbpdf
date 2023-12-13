@@ -39,7 +39,7 @@ class GGBParser {
     // カメラ情報 (this.camera)
     this.parse_xml_camera();
     // element要素 (this.elts)、点の座標データ構築 (this.pts)
-    this.parse_xml_element_pt();
+    this.parse_xml_element();
     // command要素 (this.cmds)
     this.parse_xml_command();
     // command要素を読み、オブジェクトの頂点座標、点の面所属を求める
@@ -70,7 +70,7 @@ class GGBParser {
   }
 
   //// element要素 (this.elts)
-  parse_xml_element_pt() {
+  parse_xml_element() {
     var elts = this.xml.querySelectorAll('geogebra construction element');
     elts.forEach ((elt) => {
       let lbl = elt.getAttribute('label');
@@ -83,39 +83,7 @@ class GGBParser {
       switch (res.type) {
       case 'point': // 点の座標、ラベルオフセット、this.ptsも
       case 'point3d':
-        res.kind = 'Point'; // command要素がないのでここで設定
-	// 座標
-        if (res.type == 'point') {
-          res.coords = [ GGBParser.getAttrN(elt, 'coords', 'x'),
-                         GGBParser.getAttrN(elt, 'coords', 'y'),
-                         0];
-        } else {
-          res.coords = [ GGBParser.getAttrN(elt, 'coords', 'x'),
-                         GGBParser.getAttrN(elt, 'coords', 'y'),
-                         GGBParser.getAttrN(elt, 'coords', 'z') ];
-        }
-	// this.pts
-        this.pts[lbl] = res.coords;
-	// ラベルオフセット
-        let eltofst = elt.querySelector('labelOffset');
-        let uv = [0, 0];
-        if (eltofst) {
-            uv = [Number(eltofst.getAttribute('x')),
-                  Number(eltofst.getAttribute('y'))];
-        }
-        res.labelOffset = uv;
-	// ラベルの表示モード
-	let lblmode = GGBParser.getAttrN(elt, 'labelMode', 'val');
-	// ラベルテキスト
-	let lbltxt = lbl;
-	if (lblmode == 3 || lblmode == 9) {
-	  lbltxt = GGBParser.getAttr(elt, 'caption', 'val');
-	}
-	if (lbltxt[0] != '$' || ! GGBPDF.online) {
-	  res.labelText = lbltxt; // 名前、texでない見出し
-	} else {
-	  res.labelText = katex.renderToString('\\text{\\small'+lbltxt+'}', {output:"html"}); // texな見出し
-	}
+	this.parse_xml_element_pt(lbl, elt, res);
         break;
       case 'segment': // 線分の太さ、スタイル
       case 'segment3d':
@@ -125,6 +93,44 @@ class GGBParser {
       }
       this.elts[lbl] = res;
     });
+  }
+
+  //// element要素で点のラベルの情報を収集
+  // lbl オブジェクト名
+  // elt element要素
+  // res this.elts[lbl]に設定する連想配列
+  parse_xml_element_pt(lbl, elt, res) {
+    res.kind = 'Point'; // command要素がないのでここで設定
+    // 座標
+    if (res.type == 'point') {
+      res.coords = [ GGBParser.getAttrN(elt, 'coords', 'x'),
+                     GGBParser.getAttrN(elt, 'coords', 'y'),
+                     0];
+    } else {
+      res.coords = [ GGBParser.getAttrN(elt, 'coords', 'x'),
+                     GGBParser.getAttrN(elt, 'coords', 'y'),
+                     GGBParser.getAttrN(elt, 'coords', 'z') ];
+    }
+    this.pts[lbl] = res.coords;
+    // ラベルオフセット
+    var eltofst = elt.querySelector('labelOffset');
+    var uv = [0, 0];
+    if (eltofst) {
+      uv = [Number(eltofst.getAttribute('x')),
+            Number(eltofst.getAttribute('y'))];
+    }
+    res.labelOffset = uv;
+    // ラベルの表示モード
+    var lblmode = GGBParser.getAttrN(elt, 'labelMode', 'val');
+    // ラベルテキスト
+    res.labelText = lbl;
+    if (lblmode==3 || lblmode==9) { // 0/1/2/3/9 = 名前/名前と値/値/見出し/見出しと値
+      res.labelText = GGBParser.getAttr(elt, 'caption', 'val');
+    }
+    // texな見出し
+    if (res.labelText[0] == '$' && GGBPDF.online) {
+      res.texCaption = katex.renderToString('\\text{\\small'+res.labelText+'}', {output:"html"});
+    }
   }
 
   //// command要素 (this.cmds)
