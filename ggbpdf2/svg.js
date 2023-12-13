@@ -110,7 +110,7 @@ class SVG {
                             ggb.camera.xZero, ggb.camera.yZero, ggb.camera.zZero);
       let xy2d = V.proj(ggb.camera.eyex, ggb.camera.scrnx, xyz)[0];
       SVG.labelxy[lbl] = xy2d; // 保存しておいて、pdf, texで再利用
-      if (ggb.elts[lbl].labelText[0] == '$') { // texは$で始まる
+      if (GGBPDF.online && ggb.elts[lbl].labelText[0] == '$') { // texは$で始まる
 	SVG.foreignObject(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].texCaption);
       } else { // 文字列
 	SVG.text(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
