@@ -42,7 +42,6 @@ class TEX {
       TEX.lines.push(`\\Line(${x1},${y1})(${x2},${y2})`); // 実線
     } else {
       var dash = TEX.dashstyle(style.lineType);
-      console.log(dash);
       TEX.lines.push(`\\Dline(${x1},${y1})(${x2},${y2})${dash}`); // スタイルで破線
     }      
   }
@@ -55,7 +54,6 @@ class TEX {
     [x1, y1] = [x1*scale, y1*scale];
     [x2, y2] = [x2*scale, y2*scale];
     TEX.thickness(style.thickness);
-    console.log('dline', TEX.DLINE_DASH);
     TEX.lines.push(`\\Dline(${x1},${y1})(${x2},${y2})${TEX.DLINE_DASH}`);
   }
 
@@ -91,11 +89,8 @@ class TEX {
                             ggb.camera.xAngle, ggb.camera.zAngle,
                             ggb.camera.xZero, ggb.camera.yZero, ggb.camera.zZero);
       let xy2d = V.proj(ggb.camera.eyex, ggb.camera.scrnx, xyz)[0];
-      if (ggb.elts[lbl].labelText[0] == '<') { // texは<span>で始まるはず。点の名前を表示
-	TEX.text(xy2d, ggb.elts[lbl].labelOffset, lbl);	// !! ここまだ
-      } else { // 文字列
-	TEX.text(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
-      }
+      // texでも文字列でも同じ
+      TEX.text(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
     }
     // 寸法計算
     var xmin = INF;
