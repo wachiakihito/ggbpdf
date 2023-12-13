@@ -106,8 +106,8 @@ class SVG {
                             ggb.camera.xAngle, ggb.camera.zAngle,
                             ggb.camera.xZero, ggb.camera.yZero, ggb.camera.zZero);
       let xy2d = V.proj(ggb.camera.eyex, ggb.camera.scrnx, xyz)[0];
-      if (ggb.elts[lbl].labelText[0] == '<') { // texは<span>で始まるはず
-	SVG.foreignObject(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
+      if (ggb.elts[lbl].labelText[0] == '$') { // texは$で始まる
+	SVG.foreignObject(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].texCaption);
       } else { // 文字列
 	SVG.text(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
       }
