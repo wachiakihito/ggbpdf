@@ -10,8 +10,10 @@ class SVG {
   // svg要素のサイズ
   static width;
   static height;
-  // svg要素のinnerHTMLに置く文字列をためる描画キュー (!! 改名したい)
+  // svg要素のinnerHTMLに置く文字列をためる描画キュー
   static objs;
+  // 点のラベルの表示位置 (2d) lbl=>[x,y]
+  static labelxy;
 
   //// 座標をviewBox中心を原点とする左手系に変換
   static conv(x, y) {
@@ -92,6 +94,7 @@ class SVG {
     var vb = svg.getAttribute('viewBox').split(' ');
     SVG.width = parseInt(vb[2]);
     SVG.height = parseInt(vb[3]);
+    SVG.labelxy = {};
     // 見える線を描画
     SVG.objs = [];
     hlr.vsegs2d.forEach ((seg) => SVG.line(seg, hlr.vstyles[seg]));
@@ -106,6 +109,7 @@ class SVG {
                             ggb.camera.xAngle, ggb.camera.zAngle,
                             ggb.camera.xZero, ggb.camera.yZero, ggb.camera.zZero);
       let xy2d = V.proj(ggb.camera.eyex, ggb.camera.scrnx, xyz)[0];
+      SVG.labelxy[lbl] = xy2d; // 保存しておいて、pdf, texで再利用
       if (ggb.elts[lbl].labelText[0] == '$') { // texは$で始まる
 	SVG.foreignObject(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].texCaption);
       } else { // 文字列
