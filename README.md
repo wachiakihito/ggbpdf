@@ -23,7 +23,8 @@
 - [5. 既知のバグ](#5-既知のバグ)
 
 動的数学ソフトウェアGeoGebraで作図された簡単な空間図形から、
-ベクター画像でsvgやpdfファイルを作成します。
+ベクター画像でsvgやpdfファイルを作成したり、
+texのpicture環境を出力したりします。
 
 細かく分けると次の3つがあります。
 
@@ -45,7 +46,8 @@ svg画像、pdf画像、texのpicture環境を出力できる。
 
 ## 1. ggbpdf.ggb
 
-このggbファイルをGeoGebraで開くと、svg出力の機能が備わっています。
+このggbファイルをGeoGebraで開くと、svg画像と
+texのpicture環境での出力の機能が備わっています。
 
 ### 1-1. スクリーンショット
 ![立方体](fig/cube-plane-ggb.png)
