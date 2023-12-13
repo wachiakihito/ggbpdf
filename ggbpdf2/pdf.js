@@ -82,12 +82,8 @@ class PDF {
     var ggb = SVG.ggb;
     for (let lbl of Object.keys(ggb.pts)) {
       if (! ggb.elts[lbl].showobj || ! ggb.elts[lbl].showlbl) { continue };
-      let xyz = V.transform(ggb.pts[lbl],
-                            ggb.camera.xAngle, ggb.camera.zAngle,
-                            ggb.camera.xZero, ggb.camera.yZero, ggb.camera.zZero);
-      let xy2d = V.proj(ggb.camera.eyex, ggb.camera.scrnx, xyz)[0];
       // texであってもタイプセットせずに表示
-      PDF.text(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
+      PDF.text(SVG.labelxy[lbl], ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
     }
     // 結果を表示
     const pdfDataUri = await PDF.pdfDoc.saveAsBase64({ dataUri: true });
