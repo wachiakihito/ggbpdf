@@ -86,11 +86,8 @@ class PDF {
                             ggb.camera.xAngle, ggb.camera.zAngle,
                             ggb.camera.xZero, ggb.camera.yZero, ggb.camera.zZero);
       let xy2d = V.proj(ggb.camera.eyex, ggb.camera.scrnx, xyz)[0];
-      if (ggb.elts[lbl].labelText[0] == '<') { // texは<span>で始まるはず。点の名前を表示
-	PDF.text(xy2d, ggb.elts[lbl].labelOffset, lbl);
-      } else { // 文字列
-	PDF.text(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
-      }
+      // texであってもタイプセットせずに表示
+      PDF.text(xy2d, ggb.elts[lbl].labelOffset, ggb.elts[lbl].labelText);
     }
     // 結果を表示
     const pdfDataUri = await PDF.pdfDoc.saveAsBase64({ dataUri: true });
