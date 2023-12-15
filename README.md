@@ -182,7 +182,7 @@ platexでそのままタイプセットできるtexファイルを標準出力�
 * ggbtex/lib_hlr3.rb
 
 ### 3-2. 対応している図形
-概ねggbpdf.ggbに準じますが、
+概ね**ggbpdf.ggb**に準じますが、
 ggbtex.rbはさらにその一部だけに対応します。
 
 
