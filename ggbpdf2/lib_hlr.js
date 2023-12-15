@@ -268,8 +268,8 @@ class V {
 
   //// 空間内の直線pt0-pt1が平面planeの正の側にある t の範囲
   // 区間集合で返す。
-  // 直線が平面に含まれるなら [-INF, INF]
-  // 直線が平面と平行ならば、正の側かどうかに応じて  [-INF, INF] か []
+  // 直線が平面に含まれるなら [[-INF, INF]]
+  // 直線が平面と平行ならば、正の側かどうかに応じて  [[-INF, INF]] か []
   static pospart_plane_line_t(plane, pt0, pt1) {
     var t = V.int_plane_line_t(plane, pt0, pt1);
     var p_pt0 = V.plane_pt(plane, pt0);
