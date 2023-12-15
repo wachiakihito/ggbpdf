@@ -207,7 +207,7 @@ class V {
     return [a, b, c, d];
   }
 
-  //// 空間内の平面の方程式の点の座標を代入
+  //// 空間内の平面の方程式に点の座標を代入
   static plane_pt(plane, pt) {
     return V.inn(plane, pt) + plane[3] // 行儀悪いが内積が短い方に合わせるので
   }
