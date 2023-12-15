@@ -207,6 +207,7 @@ GeoGebraからネットワーク上のファイルを読む方法を作者が知
 3. ggbpdf2/parseggb.js
 4. ggbpdf2/pdf.js
 5. ggbpdf2/svg.js
+6. ggbpdf2/tex.js
 
 ### 4-3. 既存のggbファイルにsvg画像、pdf画像、picture環境出力機能を持たせる
 既存のggbファイルのグローバルJavascriptに、上記5つのファイルを単に連結したものを格納すれば、
