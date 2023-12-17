@@ -64,7 +64,7 @@ texのpicture環境での出力の機能が備わっています。
 * hidden lines: 見えない線 (陰線) の表示の切り替え
 * int.: 多角形どうしの交線の太さ
 * gap: 線分の背後の線に入れる切り欠きの幅
-* download: svg画像のダウンロード
+* download svg: svg画像のダウンロード
 * dowload tex: texのpicture環境のダウンロード
 
 ### 1-3. 対応している図形・機能
